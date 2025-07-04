@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  terraform-staging:
+    build:
+      context: .
+    container_name: terraform-staging
+    working_dir: /workspace/staging
+    volumes:
+      - .:/workspace
+      - ~/.config/gcloud:/root/.config/gcloud:ro
+      - ${GOOGLE_APPLICATION_CREDENTIALS:-./service-account.json}:/service-account.json:ro
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
+      TF_VAR_project_id: staging-rehuman
+    entrypoint: [ "sh" ]
+    stdin_open: true
+    tty: true

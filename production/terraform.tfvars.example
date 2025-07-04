@@ -1,0 +1,13 @@
+# production/terraform.tfvars.example
+# Copy this file to terraform.tfvars and update the values
+
+project_id = "production-rehuman"
+region     = "europe-west2"
+
+production_app_name = "production-rehuman-app"
+application_key  = "your-32-character-application-key"
+
+db_instance_tier = "db-f1-micro"
+cloud_run_image  = "gcr.io/production-rehuman/production-rehuman-app:latest"
+
+environment = "production"
