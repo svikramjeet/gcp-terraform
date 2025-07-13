@@ -4,7 +4,7 @@ locals {
     "roles/storage.admin",
     "roles/secretmanager.secretAccessor",
     "roles/run.invoker",
-    "roles/documentai.apiAdmin",
+    "roles/documentai.admin",
     "roles/errorreporting.admin",
     "roles/errorreporting.writer",
     "roles/logging.logWriter",
@@ -17,7 +17,7 @@ locals {
     "roles/run.developer",
     "roles/run.invoker",
     "roles/cloudsql.client",
-    "roles/documentai.apiAdmin",
+    "roles/documentai.admin",
     "roles/errorreporting.admin",
     "roles/errorreporting.writer",
     "roles/logging.logWriter",
@@ -30,8 +30,8 @@ locals {
   ]
 
   # Service account emails
-  cloud_run_sa_email   = "cloudrun-sa@${var.project_id}.iam.gserviceaccount.com"
-  cloud_build_sa_email = "${var.project_number}@cloudbuild.gserviceaccount.com"
+  cloud_run_sa_email   = "${var.project_id}-cloud-run@${var.project_id}.iam.gserviceaccount.com"
+  cloud_build_sa_email = "${var.project_id}-cloud-build@${var.project_id}.iam.gserviceaccount.com"
 }
 
 resource "google_project_iam_member" "cloud_run_iam" {
@@ -48,16 +48,4 @@ resource "google_project_iam_member" "cloud_build_iam" {
   project = var.project_id
   role    = each.key
   member  = "serviceAccount:${local.cloud_build_sa_email}"
-}
-
-resource "google_service_account_iam_member" "firebase_adminsdk_token_creator" {
-  service_account_id = "projects/${var.project_id}/serviceAccounts/${local.cloud_run_sa_email}"
-  role               = "roles/iam.serviceAccountTokenCreator"
-  member             = "serviceAccount:firebase-adminsdk-fbsvc@${var.project_id}.iam.gserviceaccount.com"
-}
-
-resource "google_service_account_iam_member" "firebase_fcm_token_creator" {
-  service_account_id = "projects/${var.project_id}/serviceAccounts/${local.cloud_run_sa_email}"
-  role               = "roles/iam.serviceAccountTokenCreator"
-  member             = "serviceAccount:fcm-push@${var.project_id}.iam.gserviceaccount.com"
 }

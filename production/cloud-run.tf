@@ -2,6 +2,7 @@ resource "google_cloud_run_v2_service" "production_app" {
   project  = var.project_id
   name     = var.cloud_run_app_name
   location = var.region
+  deletion_protection = false
 
     lifecycle {
       ignore_changes = [
@@ -249,6 +250,7 @@ resource "google_cloud_run_v2_service" "production_worker_app" {
   project  = var.project_id
   name     = var.cloud_run_worker_name
   location = var.region
+  deletion_protection = false
 
     lifecycle {
       ignore_changes = [

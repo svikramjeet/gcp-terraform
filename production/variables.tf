@@ -196,3 +196,42 @@ variable "cloud_run_max_instances" {
   default     = 2
 }
 
+variable "mail_from_address" {
+  description = "The from address used in mail sending"
+  type        = string
+}
+
+variable "document_ai_location" {
+  description = "Location for Document AI resources"
+  type        = string
+}
+
+variable "microsoft_tenant_id" {
+  description = "Microsoft tenant id"
+  type        = string
+}
+
+variable "document_ai_processor_id" {
+  description = "processor ID for Document AI"
+  type        = string
+}
+
+variable "microsoft_redirect_uri" {
+  description = "Microsoft redirect url"
+  type        = string
+}
+
+variable "app_url" {
+  description = "Application url"
+  type        = string
+}
+
+variable "google_redirect_uri" {
+  description = "Google redirect url"
+  type        = string
+}
+
+variable "google_cloud_key_file" {
+  description = "Google cloud key"
+  type        = string
+}
