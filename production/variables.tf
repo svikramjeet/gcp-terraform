@@ -183,6 +183,11 @@ variable "cloud_build_sa_account_id" {
   type        = string
 }
 
+variable "cloud_run_job_sa_account_id" {
+  description = "Account ID for the Cloud Run Job service account"
+  type        = string
+}
+
 variable "cloud_run_min_instances" {
   description = "Minimum number of Cloud Run instances"
   type        = number
