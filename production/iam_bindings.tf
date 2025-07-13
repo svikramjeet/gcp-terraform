@@ -49,3 +49,15 @@ resource "google_project_iam_member" "cloud_build_iam" {
   role    = each.key
   member  = "serviceAccount:${local.cloud_build_sa_email}"
 }
+
+resource "google_service_account_iam_member" "firebase_adminsdk_token_creator" {
+  service_account_id = "projects/${var.project_id}/serviceAccounts/${local.cloud_run_sa_email}"
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:firebase-adminsdk-fbsvc@${var.project_id}.iam.gserviceaccount.com"
+}
+
+resource "google_service_account_iam_member" "firebase_fcm_token_creator" {
+  service_account_id = "projects/${var.project_id}/serviceAccounts/${local.cloud_run_sa_email}"
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:fcm-push@${var.project_id}.iam.gserviceaccount.com"
+}
