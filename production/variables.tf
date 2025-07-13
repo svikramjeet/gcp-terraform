@@ -239,3 +239,8 @@ variable "apple_token_secret_name" {
   description = "Secret name for apple token"
   type        = string
 }
+
+variable "apple_token_secret_value" {
+  description = "Secret value for apple token"
+  type        = string
+}
