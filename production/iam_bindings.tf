@@ -1,31 +1,51 @@
-# IAM roles for Cloud Run service account
 locals {
-  cloud_run_roles = {
-    sql_client      = "roles/cloudsql.client"
-    storage_admin   = "roles/storage.admin"
-    secret_accessor = "roles/secretmanager.secretAccessor"
-  }
+  cloud_run_roles = [
+    "roles/cloudsql.client",
+    "roles/storage.admin",
+    "roles/secretmanager.secretAccessor",
+    "roles/run.invoker",
+    "roles/documentai.apiAdmin",
+    "roles/errorreporting.admin",
+    "roles/errorreporting.writer",
+    "roles/logging.logWriter",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser"
+  ]
 
-  cloud_build_roles = {
-    developer      = "roles/cloudbuild.builds.builder"
-    run_developer  = "roles/run.developer"
-    storage_admin  = "roles/storage.admin"
-    sa_user        = "roles/iam.serviceAccountUser"
-  }
+  cloud_build_roles = [
+    "roles/run.admin",
+    "roles/run.developer",
+    "roles/run.invoker",
+    "roles/cloudsql.client",
+    "roles/documentai.apiAdmin",
+    "roles/errorreporting.admin",
+    "roles/errorreporting.writer",
+    "roles/logging.logWriter",
+    "roles/secretmanager.secretAccessor",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser",
+    "roles/storage.admin",
+    "roles/artifactregistry.reader",
+    "roles/artifactregistry.writer"
+  ]
+
+  # Service account emails
+  cloud_run_sa_email   = "cloudrun-sa@${var.project_id}.iam.gserviceaccount.com"
+  cloud_build_sa_email = "${var.project_number}@cloudbuild.gserviceaccount.com"
 }
 
-resource "google_project_iam_member" "cloud_run_bindings" {
-  for_each = local.cloud_run_roles
+resource "google_project_iam_member" "cloud_run_iam" {
+  for_each = toset(local.cloud_run_roles)
 
   project = var.project_id
-  role    = each.value
-  member  = "serviceAccount:${google_service_account.production_cloud_run_sa.email}"
+  role    = each.key
+  member  = "serviceAccount:${local.cloud_run_sa_email}"
 }
 
-resource "google_project_iam_member" "cloud_build_bindings" {
-  for_each = local.cloud_build_roles
+resource "google_project_iam_member" "cloud_build_iam" {
+  for_each = toset(local.cloud_build_roles)
 
   project = var.project_id
-  role    = each.value
-  member  = "serviceAccount:${google_service_account.production_cloud_build_sa.email}"
+  role    = each.key
+  member  = "serviceAccount:${local.cloud_build_sa_email}"
 }
