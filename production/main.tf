@@ -24,13 +24,22 @@ resource "google_project_service" "required_apis" {
   for_each = toset([
     "cloudbilling.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "sqladmin.googleapis.com",
-    "run.googleapis.com",
-    "storage.googleapis.com",
+    "clouderrorreporting.googleapis.com",
     "cloudbuild.googleapis.com",
+    "run.googleapis.com",
+    "sqladmin.googleapis.com",
+    "storage.googleapis.com",
     "secretmanager.googleapis.com",
     "iam.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "firebase.googleapis.com",
+    "firebasehosting.googleapis.com",
+    "fcm.googleapis.com",
+    "firebaseinappmessaging.googleapis.com",
+    "firebaseremoteconfig.googleapis.com",
+    "firebaseextensions.googleapis.com",
+    "firebaseappdistribution.googleapis.com",
+    "fcmregistrations.googleapis.com"
   ])
 
   project  = var.project_id
