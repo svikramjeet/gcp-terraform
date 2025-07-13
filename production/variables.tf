@@ -94,7 +94,6 @@ variable "db_password_secret_name" {
   type        = string
 }
 
-# Secret Manager - Application secrets
 variable "postmark_token_secret_name" {
   description = "Secret name for Postmark token"
   type        = string
@@ -233,5 +232,10 @@ variable "google_redirect_uri" {
 
 variable "google_cloud_key_file" {
   description = "Google cloud key"
+  type        = string
+}
+
+variable "apple_token_secret_name" {
+  description = "Secret name for apple token"
   type        = string
 }

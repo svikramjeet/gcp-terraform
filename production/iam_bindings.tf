@@ -26,7 +26,8 @@ locals {
     "roles/iam.serviceAccountUser",
     "roles/storage.admin",
     "roles/artifactregistry.reader",
-    "roles/artifactregistry.writer"
+    "roles/artifactregistry.writer",
+    "roles/artifactregistry.admin"
   ]
 
   # Service account emails

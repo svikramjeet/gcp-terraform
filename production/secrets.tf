@@ -68,6 +68,20 @@ resource "google_secret_manager_secret_version" "production_microsoft_client_sec
   secret_data = var.microsoft_client_secret_secret_value
 }
 
+resource "google_secret_manager_secret" "production_apple_token" {
+  project   = var.project_id
+  secret_id = var.apple_token_secret_name
+
+  replication {
+    auto {}
+  }
+}
+
+resource "google_secret_manager_secret_version" "production_apple_token_version" {
+  secret      = google_secret_manager_secret.production_apple_token.id
+  secret_data = var.apple_token_secret_value
+}
+
 # Grant Cloud Run service account access to secrets
 resource "google_secret_manager_secret_iam_member" "production_secrets_access" {
   for_each = {
