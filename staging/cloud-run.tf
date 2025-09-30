@@ -3,21 +3,21 @@ resource "google_cloud_run_v2_service" "staging_app" {
   name     = var.cloud_run_app_name
   location = var.region
 
-    lifecycle {
-      ignore_changes = [
-        template[0].annotations,
-        template[0].containers[0].resources[0].limits["memory"],
-        template[0].containers[0].name
-      ]
+  lifecycle {
+    ignore_changes = [
+      template[0].annotations,
+      template[0].containers[0].resources[0].limits["memory"],
+      template[0].containers[0].name
+    ]
   }
 
   template {
     service_account = google_service_account.staging_cloud_run_sa.email
 
     annotations = {
-      "run.googleapis.com/cloudsql-instances"     = google_sql_database_instance.staging_db.connection_name
-      "autoscaling.knative.dev/minScale"          = "1"
-      "autoscaling.knative.dev/maxScale"          = "2"
+      "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.staging_db.connection_name
+      "autoscaling.knative.dev/minScale"      = "1"
+      "autoscaling.knative.dev/maxScale"      = "2"
     }
 
     volumes {
@@ -35,7 +35,7 @@ resource "google_cloud_run_v2_service" "staging_app" {
         mount_path = "/cloudsql"
       }
 
-      name = "rehuman-api-1"
+      name  = "rehuman-api-1"
       image = var.cloud_run_image
 
       resources {
@@ -225,12 +225,14 @@ resource "google_cloud_run_v2_service" "staging_app" {
   depends_on = [google_project_service.required_apis]
 }
 
-resource "google_cloud_run_service_iam_member" "staging_app_public" {
-  location = google_cloud_run_v2_service.staging_app.location
-  service  = google_cloud_run_v2_service.staging_app.name
-  role     = "roles/run.invoker"
-  member   = "allUsers"
-}
+# SECURITY NOTE: Public access removed for security best practices
+# Consider implementing Cloud IAP or proper authentication instead
+# resource "google_cloud_run_service_iam_member" "staging_app_public" {
+#   location = google_cloud_run_v2_service.staging_app.location
+#   service  = google_cloud_run_v2_service.staging_app.name
+#   role     = "roles/run.invoker"
+#   member   = "allUsers"
+# }
 
 # ------------------------------
 # Worker Cloud Run Service
@@ -240,21 +242,21 @@ resource "google_cloud_run_v2_service" "staging_worker_app" {
   name     = var.cloud_run_worker_name
   location = var.region
 
-    lifecycle {
-      ignore_changes = [
-        template[0].annotations,
-        template[0].containers[0].resources[0].limits["memory"],
-        template[0].containers[0].name
-      ]
+  lifecycle {
+    ignore_changes = [
+      template[0].annotations,
+      template[0].containers[0].resources[0].limits["memory"],
+      template[0].containers[0].name
+    ]
   }
 
   template {
     service_account = google_service_account.staging_cloud_run_sa.email
 
     annotations = {
-      "run.googleapis.com/cloudsql-instances"     = google_sql_database_instance.staging_db.connection_name
-      "autoscaling.knative.dev/minScale"          = "1"
-      "autoscaling.knative.dev/maxScale"          = "2"
+      "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.staging_db.connection_name
+      "autoscaling.knative.dev/minScale"      = "1"
+      "autoscaling.knative.dev/maxScale"      = "2"
     }
 
     volumes {
@@ -268,7 +270,7 @@ resource "google_cloud_run_v2_service" "staging_worker_app" {
 
     containers {
       command = ["/var/www/html/cloud-run-worker-entrypoint"]
-      image = var.cloud_run_image
+      image   = var.cloud_run_image
 
       volume_mounts {
         name       = "cloudsql"
@@ -463,9 +465,11 @@ resource "google_cloud_run_v2_service" "staging_worker_app" {
   depends_on = [google_project_service.required_apis]
 }
 
-resource "google_cloud_run_service_iam_member" "staging_worker_app_public" {
-  location = google_cloud_run_v2_service.staging_worker_app.location
-  service  = google_cloud_run_v2_service.staging_worker_app.name
-  role     = "roles/run.invoker"
-  member   = "allUsers"
-}
+# SECURITY NOTE: Public access removed for security best practices
+# Consider implementing Cloud IAP or proper authentication instead
+# resource "google_cloud_run_service_iam_member" "staging_worker_app_public" {
+#   location = google_cloud_run_v2_service.staging_worker_app.location
+#   service  = google_cloud_run_v2_service.staging_worker_app.name
+#   role     = "roles/run.invoker"
+#   member   = "allUsers"
+# }

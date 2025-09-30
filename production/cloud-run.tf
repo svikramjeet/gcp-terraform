@@ -1,24 +1,24 @@
 resource "google_cloud_run_v2_service" "production_app" {
-  project  = var.project_id
-  name     = var.cloud_run_app_name
-  location = var.region
+  project             = var.project_id
+  name                = var.cloud_run_app_name
+  location            = var.region
   deletion_protection = false
 
-    lifecycle {
-      ignore_changes = [
-        template[0].annotations,
-        template[0].containers[0].resources[0].limits["memory"],
-        template[0].containers[0].name
-      ]
+  lifecycle {
+    ignore_changes = [
+      template[0].annotations,
+      template[0].containers[0].resources[0].limits["memory"],
+      template[0].containers[0].name
+    ]
   }
 
   template {
     service_account = google_service_account.production_cloud_run_sa.email
 
     annotations = {
-      "run.googleapis.com/cloudsql-instances"     = google_sql_database_instance.production_db.connection_name
-      "autoscaling.knative.dev/minScale"          = "1"
-      "autoscaling.knative.dev/maxScale"          = "2"
+      "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.production_db.connection_name
+      "autoscaling.knative.dev/minScale"      = "1"
+      "autoscaling.knative.dev/maxScale"      = "2"
     }
 
     volumes {
@@ -36,7 +36,7 @@ resource "google_cloud_run_v2_service" "production_app" {
         mount_path = "/cloudsql"
       }
 
-      name = "rehuman-api-1"
+      name  = "rehuman-api-1"
       image = var.cloud_run_image
 
       resources {
@@ -52,7 +52,7 @@ resource "google_cloud_run_v2_service" "production_app" {
       }
 
       env {
-        name = "QUEUE_NAME"
+        name  = "QUEUE_NAME"
         value = "default"
       }
 
@@ -73,7 +73,7 @@ resource "google_cloud_run_v2_service" "production_app" {
 
       env {
         name  = "APP_DEBUG"
-        value = "true"
+        value = "false"
       }
 
       env {
@@ -236,37 +236,39 @@ resource "google_cloud_run_v2_service" "production_app" {
   depends_on = [google_project_service.required_apis]
 }
 
-resource "google_cloud_run_service_iam_member" "production_app_public" {
-  location = google_cloud_run_v2_service.production_app.location
-  service  = google_cloud_run_v2_service.production_app.name
-  role     = "roles/run.invoker"
-  member   = "allUsers"
-}
+# SECURITY NOTE: Public access removed for security best practices
+# Consider implementing Cloud IAP or proper authentication instead
+# resource "google_cloud_run_service_iam_member" "production_app_public" {
+#   location = google_cloud_run_v2_service.production_app.location
+#   service  = google_cloud_run_v2_service.production_app.name
+#   role     = "roles/run.invoker"
+#   member   = "allUsers"
+# }
 
 # ------------------------------
 # Worker Cloud Run Service
 # ------------------------------
 resource "google_cloud_run_v2_service" "production_worker_app" {
-  project  = var.project_id
-  name     = var.cloud_run_worker_name
-  location = var.region
+  project             = var.project_id
+  name                = var.cloud_run_worker_name
+  location            = var.region
   deletion_protection = false
 
-    lifecycle {
-      ignore_changes = [
-        template[0].annotations,
-        template[0].containers[0].resources[0].limits["memory"],
-        template[0].containers[0].name
-      ]
+  lifecycle {
+    ignore_changes = [
+      template[0].annotations,
+      template[0].containers[0].resources[0].limits["memory"],
+      template[0].containers[0].name
+    ]
   }
 
   template {
     service_account = google_service_account.production_cloud_run_sa.email
 
     annotations = {
-      "run.googleapis.com/cloudsql-instances"     = google_sql_database_instance.production_db.connection_name
-      "autoscaling.knative.dev/minScale"          = "1"
-      "autoscaling.knative.dev/maxScale"          = "2"
+      "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.production_db.connection_name
+      "autoscaling.knative.dev/minScale"      = "1"
+      "autoscaling.knative.dev/maxScale"      = "2"
     }
 
     volumes {
@@ -280,7 +282,7 @@ resource "google_cloud_run_v2_service" "production_worker_app" {
 
     containers {
       command = ["/var/www/html/cloud-run-worker-entrypoint"]
-      image = var.cloud_run_image
+      image   = var.cloud_run_image
 
       volume_mounts {
         name       = "cloudsql"
@@ -301,7 +303,7 @@ resource "google_cloud_run_v2_service" "production_worker_app" {
       }
 
       env {
-        name = "QUEUE_NAME"
+        name  = "QUEUE_NAME"
         value = "default"
       }
 
@@ -322,7 +324,7 @@ resource "google_cloud_run_v2_service" "production_worker_app" {
 
       env {
         name  = "APP_DEBUG"
-        value = "true"
+        value = "false"
       }
 
       env {
@@ -485,9 +487,11 @@ resource "google_cloud_run_v2_service" "production_worker_app" {
   depends_on = [google_project_service.required_apis]
 }
 
-resource "google_cloud_run_service_iam_member" "production_worker_app_public" {
-  location = google_cloud_run_v2_service.production_worker_app.location
-  service  = google_cloud_run_v2_service.production_worker_app.name
-  role     = "roles/run.invoker"
-  member   = "allUsers"
-}
+# SECURITY NOTE: Public access removed for security best practices
+# Consider implementing Cloud IAP or proper authentication instead
+# resource "google_cloud_run_service_iam_member" "production_worker_app_public" {
+#   location = google_cloud_run_v2_service.production_worker_app.location
+#   service  = google_cloud_run_v2_service.production_worker_app.name
+#   role     = "roles/run.invoker"
+#   member   = "allUsers"
+# }

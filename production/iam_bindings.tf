@@ -1,36 +1,29 @@
 locals {
   cloud_run_roles = [
     "roles/cloudsql.client",
-    "roles/storage.admin",
     "roles/secretmanager.secretAccessor",
     "roles/run.invoker",
-    "roles/documentai.admin",
-    "roles/errorreporting.admin",
+    "roles/documentai.editor",
     "roles/errorreporting.writer",
-    "roles/logging.logWriter",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/iam.serviceAccountUser"
+    "roles/logging.logWriter"
   ]
 
   cloud_build_roles = [
-    "roles/run.admin",
     "roles/run.developer",
     "roles/iam.serviceAccountUser",
-    "roles/storage.admin",
-    "roles/artifactregistry.reader",
-    "roles/artifactregistry.writer",
-    "roles/artifactregistry.admin"
+    "roles/artifactregistry.writer"
   ]
 
   cloud_run_job_roles = [
-    "roles/editor",    
-    "roles/secretmanager.secretAccessor"
+    "roles/secretmanager.secretAccessor",
+    "roles/logging.logWriter",
+    "roles/cloudsql.client"
   ]
 
   # Service account emails
-  cloud_run_sa_email        = "${var.project_id}-cloud-run@${var.project_id}.iam.gserviceaccount.com"
-  cloud_build_sa_email      = "${var.project_id}-cloud-build@${var.project_id}.iam.gserviceaccount.com"
-  cloud_run_job_sa_email    = "${var.project_id}-run-jobs@${var.project_id}.iam.gserviceaccount.com"
+  cloud_run_sa_email     = "${var.project_id}-cloud-run@${var.project_id}.iam.gserviceaccount.com"
+  cloud_build_sa_email   = "${var.project_id}-cloud-build@${var.project_id}.iam.gserviceaccount.com"
+  cloud_run_job_sa_email = "${var.project_id}-run-jobs@${var.project_id}.iam.gserviceaccount.com"
 
 }
 
@@ -57,4 +50,18 @@ resource "google_project_iam_member" "cloud_run_job_iam" {
   project = var.project_id
   role    = each.key
   member  = "serviceAccount:${local.cloud_run_job_sa_email}"
+}
+
+# Bucket-specific IAM bindings for Cloud Run service account
+resource "google_storage_bucket_iam_member" "cloud_run_bucket_object_admin" {
+  bucket = google_storage_bucket.production_bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${local.cloud_run_sa_email}"
+}
+
+# Bucket-specific IAM bindings for Cloud Build service account
+resource "google_storage_bucket_iam_member" "cloud_build_bucket_object_admin" {
+  bucket = google_storage_bucket.production_bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${local.cloud_build_sa_email}"
 }

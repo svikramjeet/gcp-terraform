@@ -188,6 +188,17 @@ variable "cloud_run_job_sa_account_id" {
   type        = string
 }
 
+# Monitoring and alerting
+variable "alert_email_address" {
+  description = "Email address for general alerts and notifications"
+  type        = string
+}
+
+variable "critical_alert_email_address" {
+  description = "Email address for critical alerts (production only)"
+  type        = string
+}
+
 variable "cloud_run_min_instances" {
   description = "Minimum number of Cloud Run instances"
   type        = number

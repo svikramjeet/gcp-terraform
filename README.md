@@ -138,5 +138,37 @@ The following environment variables will be automatically configured in Cloud Ru
 
 ## Security Considerations
 
+- **Least Privilege IAM**: All service accounts follow least privilege principles
+- **No Public Access**: Cloud Run services are secured (public access commented out)
+- **Production Hardening**: Debug mode disabled, comprehensive monitoring enabled
+- **Monitoring & Alerting**: Full monitoring stack with email notifications
+- **Secret Management**: Secure handling through Google Secret Manager
 - Update default passwords and secrets before production deployment
 - Review IAM permissions and adjust as needed
+- Configure email addresses for monitoring alerts
+- See [SECURITY.md](SECURITY.md) for detailed security implementation guide
+
+## Monitoring and Alerting
+
+This infrastructure includes comprehensive monitoring:
+
+### Production Monitoring:
+- Uptime checks every 60 seconds
+- Error rate monitoring with immediate alerts
+- Database CPU utilization monitoring
+- Security monitoring (failed authentication attempts)
+- Secret Manager access monitoring
+- Email notifications to ops team and on-call staff
+
+### Staging Monitoring:
+- Less aggressive thresholds for development use
+- Application error tracking
+- Basic uptime monitoring
+- Email notifications to development team
+
+### Required Configuration:
+```bash
+# Add to your terraform.tfvars
+alert_email_address = "your-team@company.com"
+critical_alert_email_address = "oncall@company.com"  # Production only
+```

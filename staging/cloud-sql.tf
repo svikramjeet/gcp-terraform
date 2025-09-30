@@ -20,20 +20,20 @@ resource "google_secret_manager_secret_version" "staging_db_password_version" {
 }
 
 resource "google_sql_database_instance" "staging_db" {
-  project              = var.project_id
-  name                 = var.db_instance_name
-  database_version     = "POSTGRES_17"
-  region               = var.region
-  deletion_protection  = false
+  project             = var.project_id
+  name                = var.db_instance_name
+  database_version    = "POSTGRES_17"
+  region              = var.region
+  deletion_protection = false
 
   settings {
-    edition                      = "ENTERPRISE"
-    tier                         = var.db_instance_tier
-    deletion_protection_enabled  = false
+    edition                     = "ENTERPRISE"
+    tier                        = var.db_instance_tier
+    deletion_protection_enabled = false
 
-    disk_type          = "PD_SSD"  
-    disk_size          = 10     
-    availability_type  = "ZONAL"
+    disk_type         = "PD_SSD"
+    disk_size         = 10
+    availability_type = "ZONAL"
 
     ip_configuration {
       ipv4_enabled = true

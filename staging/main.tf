@@ -30,11 +30,13 @@ resource "google_project_service" "required_apis" {
     "cloudbuild.googleapis.com",
     "secretmanager.googleapis.com",
     "iam.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com"
   ])
 
-  project  = var.project_id
-  service  = each.value
+  project = var.project_id
+  service = each.value
 
   disable_dependent_services = true
   disable_on_destroy         = false
