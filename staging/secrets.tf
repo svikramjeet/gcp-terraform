@@ -71,11 +71,11 @@ resource "google_secret_manager_secret_version" "staging_microsoft_client_secret
 # Grant Cloud Run service account access to secrets
 resource "google_secret_manager_secret_iam_member" "staging_secrets_access" {
   for_each = {
-    db_password         = google_secret_manager_secret.staging_db_password.id
-    postmark_token      = google_secret_manager_secret.staging_postmark_token.id
-    google_client_id    = google_secret_manager_secret.staging_google_client_id.id
-    google_client_secret = google_secret_manager_secret.staging_google_client_secret.id
-    microsoft_client_id = google_secret_manager_secret.staging_microsoft_client_id.id
+    db_password             = google_secret_manager_secret.staging_db_password.id
+    postmark_token          = google_secret_manager_secret.staging_postmark_token.id
+    google_client_id        = google_secret_manager_secret.staging_google_client_id.id
+    google_client_secret    = google_secret_manager_secret.staging_google_client_secret.id
+    microsoft_client_id     = google_secret_manager_secret.staging_microsoft_client_id.id
     microsoft_client_secret = google_secret_manager_secret.staging_microsoft_client_secret.id
   }
 

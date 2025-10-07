@@ -196,3 +196,9 @@ variable "cloud_run_max_instances" {
   default     = 2
 }
 
+# Monitoring and alerting
+variable "alert_email_address" {
+  description = "Email address for alerts and notifications"
+  type        = string
+}
+

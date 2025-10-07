@@ -1,10 +1,10 @@
-terraform { 
-  cloud { 
-    
-    organization = "svikramjeet" 
+terraform {
+  cloud {
 
-    workspaces { 
-      name = "rh-prod" 
-    } 
-  } 
+    organization = "svikramjeet"
+
+    workspaces {
+      name = "rh-prod"
+    }
+  }
 }

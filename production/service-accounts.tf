@@ -12,7 +12,7 @@ resource "google_service_account" "production_cloud_build_sa" {
   description  = "Service account for production Cloud Build created via terraform"
 }
 
-resource "google_service_account" "production_cloud_run_job_sa" {  
+resource "google_service_account" "production_cloud_run_job_sa" {
   project      = var.project_id
   account_id   = var.cloud_run_job_sa_account_id
   display_name = "Production Cloud Run Service Account"

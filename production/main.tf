@@ -32,6 +32,8 @@ resource "google_project_service" "required_apis" {
     "secretmanager.googleapis.com",
     "iam.googleapis.com",
     "compute.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com",
     "firebase.googleapis.com",
     "firebasehosting.googleapis.com",
     "fcm.googleapis.com",
@@ -42,8 +44,8 @@ resource "google_project_service" "required_apis" {
     "fcmregistrations.googleapis.com"
   ])
 
-  project  = var.project_id
-  service  = each.value
+  project = var.project_id
+  service = each.value
 
   disable_dependent_services = true
   disable_on_destroy         = false

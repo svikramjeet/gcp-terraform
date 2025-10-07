@@ -23,6 +23,7 @@ test
 /production/.terraform
 /production/terraform.tfstate.backup
 
+*.zip
 .terraform/
 .terraform.lock.hcl
 crash.log
