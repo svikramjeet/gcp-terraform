@@ -9,15 +9,6 @@ resource "google_storage_bucket" "production_bucket" {
     enabled = true
   }
 
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      age = 30
-    }
-  }
-
   cors {
     origin          = ["*"]
     method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
